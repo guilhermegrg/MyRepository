@@ -15,6 +15,8 @@
             $date = date('Y-m-d H:i:s');
             $post_id = $id;
 
+            
+            
 
             $query = "INSERT INTO comments (author,email,content,status,date,post_id) VALUES ('$author','$email','$content','$status','$date',$post_id)";
             $result = query($query);
