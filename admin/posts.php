@@ -53,6 +53,14 @@
                                 include "includes/edit_post.php";
                             break;
                                 
+                               
+                            case 'view_comments':
+//                                echo "100!";
+//                                $id = $_GET['id'];
+//                                echo "<h1> Id on Posts.php is $id</h1><br>";
+                                include "includes/view_all_comments_from_post.php";
+                            break;                                
+                                
                                 
                             default:
 //                                echo "default!";

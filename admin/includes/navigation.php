@@ -11,10 +11,55 @@
             </div>
             <!-- Top Menu Items -->
             <ul class="nav navbar-right top-nav">
+              
+              <?php
+                
+                //update or create new session on database
+                $session_id = session_id();
+//                echo $session_id;
+                
+                
+                $query = "SELECT * FROM user_sessions WHERE session_id = '$session_id'";
+                $results = query($query);
+                
+                $session_count = mysqli_num_rows($results);
+                echo "Session number:" . $session_count;
+                
+                
+                if($session_count == 0){
+                    $time = time();
+                    $query = "INSERT INTO user_sessions(session_id,time) VALUES('$session_id','$time')";
+                    query($query);
+                    
+                }else{
+                    $row = mysqli_fetch_assoc($results);
+                    $id = $row['id'];
+                    $time = time();
+                    $query = "UPDATE user_sessions SET time='$time' WHERE id=$id";
+                    query($query);
+                }
+                
+                
+                
+                //query users online
+//                $query = "SELECT * FROM user_sessions WHERE time > " . (time()-3);
+//                $results = query($query);
+//                $user_count  = mysqli_num_rows($results);
+                
+//               $user_count = getOnlineUsers();
+//               echo "<li><a>Users Online:<span class='usersonline'>$user_count<span></a></li>";
+                
+                
+              ?>
+              
+              <li>
+                  <a>Users Online:<span class='usersonline'><span></a>
+              </li>
+              
                <li>
                    <a href="../index.php" >Homepage</a>
-                   
                </li>
+                
                 
                 
                 <li class="dropdown">

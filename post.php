@@ -8,23 +8,60 @@
 if(isset($_GET['id'])){
     $id = $_GET['id'];
     
-    $query = "SELECT * FROM posts WHERE id=$id";
+    $query = "UPDATE posts SET views = views + 1 WHERE id=$id";
+    $result = query($query);
+    
+    
+    
+    if(isset($_SESSION['role'])){
+        $role = $_SESSION['role'];
+        if($role == 'admin'){
+            $published_query =  "";
+        }else{
+                $published_query =  " AND status='published'";
+        }
+    }else{
+        $published_query =  " AND status='published'";
+    }
+    
+    
+    $query = "SELECT * FROM posts WHERE id=$id $published_query";
                               
     $posts = query($query);
     $row = mysqli_fetch_assoc($posts);                  
 
+    if(mysqli_num_rows($posts) == 0){
+        echo "<h2>No posts!</h2>";
+        header("Location: index.php");
+    }else{
+    
 
-    $author = $row['author'];
-    $title = $row['title'];
-    $cat_id = $row['cat_id'];
-    $status = $row['status'];
-    $image = $row['image'];
-    $tags = $row['tags'];
-    $content = $row['content'];
-    $comment_count = $row['comment_count'];
-    $date = $row['date'];
+        $author_id = $row['author_id'];
+        $title = $row['title'];
+        $cat_id = $row['cat_id'];
+        $status = $row['status'];
+        $image = $row['image'];
+        $tags = $row['tags'];
+        $content = $row['content'];
+        $comment_count = $row['comment_count'];
+        $date = $row['date'];
+
+
+
+
+        if(!$author_id){
+            $author_name = "NOT DEFINED";
+        }else{
+            $query = "SELECT * FROM users WHERE id=$author_id";
+            $results = query($query);
+            $row = mysqli_fetch_assoc($results);
+
+            $author_name = $row['username'];
+        }
+
+    }
+
 }
-
 
 ?>
     
@@ -43,10 +80,12 @@ if(isset($_GET['id'])){
                 <h1><?php echo $title; ?></h1>
 
                 <!-- Author -->
+                <?php if($author_id){ ?>
                 <p class="lead">
-                    by <a href="#"><?php echo $author; ?></a>
+                    by <a href="posts_by_author.php?author_id=<?php echo $author_id; ?>"><?php echo $author_name; ?></a>
                 </p>
-
+                <?php } ?>
+               
                 <hr>
 
                 <!-- Date/Time -->

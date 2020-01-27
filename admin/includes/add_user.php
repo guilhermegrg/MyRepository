@@ -6,10 +6,18 @@
         
         $username = $_POST['username'];
         $password = $_POST['password'];
+        $email = $_POST['email'];
         $firstname = $_POST['firstname'];
         $lastname = $_POST['lastname'];
         $role = $_POST['role'];
 
+        
+        $username = mysqli_real_escape_string($conn,$username);
+        $password = mysqli_real_escape_string($conn,$password);
+        $email = mysqli_real_escape_string($conn,$email);
+        
+        $password = password_hash($password,PASSWORD_DEFAULT);
+        
         
         $profileimage = $_FILES['profileimage']['name'];
         $profileimage_temp = $_FILES['profileimage']['tmp_name'];
@@ -18,7 +26,7 @@
         move_uploaded_file($profileimage_temp,"../images/$profileimage");
         
         
-        $query = "INSERT INTO users(username, password, firstname, lastname, role, profileimage) VALUES('$username','$password','$firstname','$lastname','$role','$profileimage')";
+        $query = "INSERT INTO users(username, password, email, firstname, lastname, role, profileimage) VALUES('$username','$password', '$email', '$firstname','$lastname','$role','$profileimage')";
         
         $result = query($query);
         $last_id = $conn->insert_id;

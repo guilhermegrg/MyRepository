@@ -1,31 +1,24 @@
  <?php   
-                             
-    $query = "SELECT * FROM posts WHERE status='draft'";
-    $results = query($query);
-    $draftpostcount = mysqli_num_rows($results);
+       
+    function getCount($tablename,$parameter,$value){
+        $query = "SELECT * FROM $tablename WHERE $parameter='$value'";
+        $results = query($query);
+        $count = mysqli_num_rows($results);
+        return $count;
+    }
 
 
-    $query = "SELECT * FROM posts WHERE status='published'";
-    $results = query($query);
-    $pubpostcount = mysqli_num_rows($results);
+    $draftpostcount = getCount("posts","status","draft");
 
+    $pubpostcount = getCount("posts","status","published");
 
-    $query = "SELECT * FROM comments WHERE status='approved'";
-    $results = query($query);
-    $appcommentcount = mysqli_num_rows($results);
+    $appcommentcount = getCount("comments","status","approved");
 
-    $query = "SELECT * FROM comments WHERE status='unapproved'";
-    $results = query($query);
-    $uncommentcount = mysqli_num_rows($results);
+    $uncommentcount = getCount("comments","status","unapproved");
 
-                
-    $query = "SELECT * FROM users WHERE role='admin'";
-    $results = query($query);
-    $adminusercount = mysqli_num_rows($results);                
+    $adminusercount = getCount("users","role","admin");               
 
-    $query = "SELECT * FROM users WHERE role='subscriber'";
-    $results = query($query);
-    $subusercount = mysqli_num_rows($results); 
+    $subusercount = getCount("users","role","subscriber"); 
 
 //    $query = "SELECT * FROM categories";
 //    $results = query($query);

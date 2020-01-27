@@ -16,7 +16,7 @@
         
         
         $title = $_POST['title'];
-        $author = $_POST['author'];
+        $author_id = $_POST['author_id'];
         $cat_id = $_POST['cat_id'];
         $status = $_POST['status'];
         $tags = $_POST['tags'];
@@ -46,7 +46,7 @@
         
 //        echo $date . "<br>";
         
-        $query = "UPDATE posts SET title='$title', author='$author', cat_id=$cat_id, status='$status', tags='$tags', content='$content' " ;
+        $query = "UPDATE posts SET title='$title', author_id=$author_id, cat_id=$cat_id, status='$status', tags='$tags', content='$content' " ;
         
         if($new_image)
             $query .= ", image='$new_image' ";
@@ -77,7 +77,7 @@
             $row = mysqli_fetch_assoc($posts);                  
         
             
-            $author = $row['author'];
+            $author_id = $row['author_id'];
             $title = $row['title'];
             $cat_id = $row['cat_id'];
             $status = $row['status'];
@@ -113,11 +113,46 @@
        <label for="title">Title</label>
         <input type="text" name="title" class="form-control" value="<?php echo $title; ?>"> 
     </div>
+    
+    
+    
+<div class="form-group">
+       <label for="author">Author</label>
+<!--        <input type="text" name="author" class="form-control" value="<?php echo $author; ?>"> -->
+       <select name="author_id" id="">
+           
+   <?php
+
+    $query = "SELECT * FROM users WHERE role='admin'";
+    $results = query($query);
+    while($row = mysqli_fetch_assoc($results)){
+    
+        $temp_author_name = $row['username'];
+        $temp_author_id = $row['id'];
+        
+        
+        if($author_id == $temp_author_id)
+            echo "<option value='$temp_author_id' selected>$temp_author_name</option>";
+        else
+            echo "<option value='$temp_author_id' >$temp_author_name</option>";
+        
+    }
+    
+
+?>
+           
+           
+           
+       </select>
+</div>
+    
+<!--
 
     <div class="form-group">
        <label for="author">Author</label>
         <input type="text" name="author" class="form-control" value="<?php echo $author; ?>"> 
     </div>
+-->
 
 <!--
     <div class="form-group">

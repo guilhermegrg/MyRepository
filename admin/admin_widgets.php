@@ -1,20 +1,16 @@
 <?php 
-    $query = "SELECT * FROM posts";
-    $results = query($query);
-    $postcount = mysqli_num_rows($results);
 
-    $query = "SELECT * FROM users";
-    $results = query($query);
-    $usercount = mysqli_num_rows($results);
+    function getFullCount($tablename){
+        $query = "SELECT * FROM $tablename";
+        $results = query($query);
+        $count = mysqli_num_rows($results);
+        return $count;
+    }
 
-
-    $query = "SELECT * FROM comments";
-    $results = query($query);
-    $commentcount = mysqli_num_rows($results);
-
-    $query = "SELECT * FROM categories";
-    $results = query($query);
-    $catcount = mysqli_num_rows($results);
+    $postcount = getFullCount("posts");
+    $usercount = getFullCount("users");
+    $commentcount =  getFullCount("comments");
+    $catcount =  getFullCount("categories");
 
 
 

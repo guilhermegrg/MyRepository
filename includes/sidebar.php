@@ -5,7 +5,22 @@
                
                
                 <!-- Login Well -->
+
+               
                 <div class="well">
+                   
+                <?php if(isset($_SESSION['role'])): 
+//                   $role = $_SESSION['role'];
+//                   echo "<h1>$role</h1>";
+               
+               ?>
+                 
+     
+                     <h4>Logged in as <?php echo $_SESSION['username']; ?> </h4>
+
+                  
+                <?php else: ?>
+                   
                     <h4>Login</h4>
                     <form action="includes/login.php" method="post">
                       <div class="form-group">
@@ -21,8 +36,15 @@
                     
                     </form>
                     <!-- /.input-group -->
+                    
+            <?php
+               endif;
+               ?>
+                    
                 </div>
-               
+
+
+
                
                
                 <!-- Blog Search Well -->

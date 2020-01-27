@@ -9,7 +9,7 @@
         
         
         $title = $_POST['title'];
-        $author = $_POST['author'];
+        $author_id = $_POST['author_id'];
         $cat_id = $_POST['cat_id'];
         $status = $_POST['status'];
         $tags = $_POST['tags'];
@@ -20,14 +20,14 @@
         $image_temp = $_FILES['image']['tmp_name'];
         
         $date = date('Y-m-d H:i:s');
-        $comment_count = 0;
+//        $comment_count = 0;
         
         move_uploaded_file($image_temp,"../images/$image");
         
         
         echo $date . "<br>";
         
-        $query = "INSERT INTO posts(title,author,cat_id,status,tags,content,image,date,comment_count) VALUES('$title','$author',$cat_id,'$status','$tags','$content','$image','$date',$comment_count)";
+        $query = "INSERT INTO posts( title, author_id, cat_id, status, tags, content, image, date) VALUES('$title', $author_id, $cat_id, '$status', '$tags', '$content', '$image', '$date')";
         
         query($query);
 //        echo "<h1>$result</h1>";
@@ -43,6 +43,16 @@
 
 ?>
    
+   <?php
+
+    $user_id = $_SESSION['user_id'];
+
+    $query = "SELECT * FROM users WHERE id=$user_id";
+    $results = query($query);
+    $row = mysqli_fetch_assoc($results);
+    $author = $row['username'];
+
+?>
 
    <form action="" method="post" enctype="multipart/form-data">
     
@@ -53,7 +63,32 @@
 
     <div class="form-group">
        <label for="author">Author</label>
-        <input type="text" name="author" class="form-control"> 
+<!--        <input type="text" name="author" class="form-control" value="<?php echo $author; ?>"> -->
+       <select name="author_id" id="">
+           
+   <?php
+
+    $query = "SELECT * FROM users WHERE role='admin'";
+    $results = query($query);
+    while($row = mysqli_fetch_assoc($results)){
+    
+        $author_name = $row['username'];
+        $author_id = $row['id'];
+        
+        
+        if($author_id == $user_id)
+            echo "<option value='$author_id' selected>$author_name</option>";
+        else
+            echo "<option value='$author_id' >$author_name</option>";
+        
+    }
+    
+
+?>
+           
+           
+           
+       </select>
     </div>
 
 

@@ -14,11 +14,28 @@
 
 <?php
     
-                    if(isset($_GET['cat_id'])){
-                        $cat_id = $_GET['cat_id'];
+                    if(isset($_GET['author_id'])){
+                        $author_id = $_GET['author_id'];
+                        $author_id = mysqli_real_escape_string($conn,$author_id);
+                        
+                        
+                        if(!$author_id){
+                            $author_name = "NOT DEFINED";
+                        }else{
+                            $query = "SELECT * FROM users WHERE id=$author_id";
+                            $results = query($query);
+                            $row = mysqli_fetch_assoc($results);
+
+                            $author_name = $row['username'];
+                        }
+
+                        
+                        
                     }else{
                         header("Location: index.php");
                     }
+
+
 
 
 
@@ -35,39 +52,34 @@
                     }
 
 
-                    $query ="SELECT * FROM posts WHERE cat_id=$cat_id $published_query ORDER BY id DESC";
-                    $posts = query($query);
 
+
+
+                    $query ="SELECT * FROM posts WHERE author_id='$author_id'  $published_query ORDER BY id DESC";
+                    $posts = query($query);
 
                     if(mysqli_num_rows($posts) == 0){
                         echo "<h2>No posts!</h2>";
                     }else{
-                    
-                            while($row = mysqli_fetch_assoc($posts)){
-                                $id = $row['id'];
-                                $title = $row['title'];
-                                $cat_id = $row['cat_id'];
-                                $author_id = $row['author_id'];
-                                $date = $row['date'];
-                                $comment_count = $row['comment_count'];
-                                $content  = substr($row['content'],0,100);
-                                $image = $row['image'];
+                        while($row = mysqli_fetch_assoc($posts)){
+                            $id = $row['id'];
+                            $title = $row['title'];
+                            $cat_id = $row['cat_id'];
 
-                            if(!$author_id){
-                                $author_name = "NOT DEFINED";
-                            }else{
-                                $query = "SELECT * FROM users WHERE id=$author_id";
-                                $results = query($query);
-                                $row = mysqli_fetch_assoc($results);
-
-                                $author_name = $row['username'];
-                            }
+                            $date = $row['date'];
+                            $comment_count = $row['comment_count'];
+                            $content  = substr($row['content'],0,100);
+                            $image = $row['image'];
 
 
-                            include "single_post.php";
 
-                            }
-                       } 
+
+                        include "single_post.php";
+
+                        }
+
+                    }
+                        
                 ?>
 
 

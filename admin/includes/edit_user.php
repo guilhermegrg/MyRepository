@@ -11,20 +11,39 @@
         $firstname = $_POST['firstname'];
         $lastname = $_POST['lastname'];
         $role = $_POST['role'];
+        $active_value = $_POST['active'];
         
         
         $profileimage = $_FILES['profileimage']['name'];
         if($profileimage){
             $profileimage_temp = $_FILES['profileimage']['tmp_name'];
             move_uploaded_file($profileimage_temp,"../images/$profileimage");
+        }else{
+            $query = "SELECT * FROM users WHERE id=$id";
+            $posts = query($query);
+            $row = mysqli_fetch_assoc($posts); 
+            
+            $profileimage = $row['profileimage'];
         }
 
         
         
         
-//        echo $date . "<br>";
+
+        if(!empty($password)){
+                $hashed_password = password_hash($password,PASSWORD_DEFAULT);
+//                echo "Passes: $password -> $hashed_password<br>";
+        }else{
+            $query = "SELECT password FROM users WHERE id=$id";
+            $results = query($query);
+            $row = mysqli_fetch_assoc($results);
+            $password = $row['password'];
+            
+            $hashed_password = $password;
+//            echo "Passes 2: $password -> $hashed_password<br>";
+        }
         
-        $query = "UPDATE users SET username='$username', password='$password', email='$email', firstname='$firstname', lastname='$lastname', role='$role' " ;
+        $query = "UPDATE users SET username='$username', password='$hashed_password', email='$email', firstname='$firstname', lastname='$lastname', role='$role' " ;
         
         if($profileimage)
             $query .= ", profileimage='$profileimage' ";
@@ -36,7 +55,7 @@
         
          echo "<p class='bg-success'>User '$username' Updated! <a href='users.php?source=edit_user&id=$id'>Edit User</a> or <a href='users.php'>View All Users</a></p>";
         
-//        header("Location: users.php");
+        header("Location: users.php");
         
         
         
@@ -71,6 +90,9 @@
             $active_value = $active?"true":"false";
         
         }
+
+
+
     else{
         
         echo "<h1>No ID passed!!!</h1>";
@@ -97,7 +119,7 @@
 
     <div class="form-group">
        <label for="tags">Password</label>
-        <input type="password" name="password" class="form-control" value="<?php echo $password; ?>"> 
+        <input  autocomplete="off" type="password" name="password" class="form-control" > 
     </div>
     
        

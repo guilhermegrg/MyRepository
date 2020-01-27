@@ -7,13 +7,13 @@
 
 
 <?php
+    session_unset();
 
-
-            $_SESSION['user_id']= null;
-            $_SESSION['username']= null;
-            $_SESSION['firstname']= null;
-            $_SESSION['lastname']= null;
-            $_SESSION['role']= null;
+//            $_SESSION['user_id']= NULL;
+//            $_SESSION['username']= NULL;
+//            $_SESSION['firstname']= NULL;
+//            $_SESSION['lastname']= NULL;
+//            $_SESSION['role']= NULL;
 
             header("Location: ../index.php");
 

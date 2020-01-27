@@ -26,12 +26,33 @@
                         
                         if(isset($_GET['delete'])){
                             
-                            $id=$_GET['delete'];
-                        
-                            $query = "DELETE FROM users WHERE id=$id";
-                            query($query);
+                            if(!isset($_SESSION['role'])){
+//                                echo "NO USER ROLE!!!";
+                                header("Location: ../index.php");
+                            }else{
                             
-                            header("Location: users.php");
+                                $user_role = $_SESSION['role'];
+                                if($user_role == "admin"){
+                                
+                                    
+                                    
+                                    
+                                    $id=$_GET['delete'];
+
+                                    $id = mysqli_real_escape_string($conn,$id);
+
+                                    $query = "DELETE FROM users WHERE id=$id";
+                                    query($query);
+
+                                    header("Location: users.php");
+                                }else{
+                                    
+//                                    echo "NO ADMIN!!!";
+                                    
+                                    header("Location: ../index.php");
+                                }
+                            }
+                            
                             
                         }else
                         if(isset($_GET['activate'])){

@@ -22,8 +22,9 @@ $conn = mysqli_connect(DB_HOST,DB_USER,DB_PASS,DB_DATABASE);
 
 if(!$conn){
     die("Error connecting to databased " . mysqli_error($conn));
-}else
-    echo "we are connected!";
+}
+//     else
+//    echo "we are connected!";
 
 
 

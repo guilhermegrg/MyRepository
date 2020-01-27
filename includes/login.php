@@ -37,8 +37,7 @@ if(isset($_POST['login'])){
         $firstname = $row['firstname'];
         $lastname = $row['lastname'];
         
-        
-        if($password != $user_password){
+        if(!password_verify($password,$user_password)){
             header("Location: ../index.php");
         }else{
             

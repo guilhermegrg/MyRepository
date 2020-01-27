@@ -45,11 +45,22 @@
         }
 
         
-        
+        if(!empty($password)){
+                $hashed_password = password_hash($password,PASSWORD_DEFAULT);
+//                echo "Passes: $password -> $hashed_password<br>";
+        }else{
+            $query = "SELECT password FROM users WHERE id=$id";
+            $results = query($query);
+            $row = mysqli_fetch_assoc($results);
+            $password = $row['password'];
+            
+            $hashed_password = $password;
+//            echo "Passes 2: $password -> $hashed_password<br>";
+        }
         
 //        echo $date . "<br>";
         
-        $query = "UPDATE users SET username='$username', password='$password', email='$email', firstname='$firstname', lastname='$lastname' " ;
+        $query = "UPDATE users SET username='$username', password='$hashed_password', email='$email', firstname='$firstname', lastname='$lastname' " ;
         
         if($profileimage)
             $query .= ", profileimage='$profileimage' ";
@@ -81,7 +92,7 @@
             
 //           $id = $row['id'];
             $username = $row['username'];
-            $password = $row['password'];
+//            $password = $row['password'];
             $email = $row['email'];
             $firstname = $row['firstname'];
             $lastname = $row['lastname'];
@@ -112,7 +123,7 @@
 
     <div class="form-group">
        <label for="tags">Password</label>
-        <input type="password" name="password" class="form-control" value="<?php echo $password; ?>"> 
+        <input autocomplete="off" type="password" name="password" class="form-control"> 
     </div>
     
        

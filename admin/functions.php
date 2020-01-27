@@ -1,6 +1,31 @@
 <?php
 
 
+function escape($string){
+    global $conn;
+    return mysqli_real_escape_string($conn,trim($string));
+}
+
+function getOnlineUsers(){
+
+    global $conn;
+    
+    if(!$conn){
+        include("../includes/db.php");
+    }
+                
+                $query = "SELECT * FROM user_sessions WHERE time > " . (time()-3);
+                $results = query($query);
+                $user_count  = mysqli_num_rows($results);
+                echo $user_count;
+}
+
+
+if(isset($_GET['getonlineusers'])){
+    return getOnlineUsers();
+}
+
+
 function str_lreplace($search, $replace, $subject)
 {
     $pos = strrpos($subject, $search);
@@ -90,6 +115,7 @@ function showAllCategories(){
         
 }
     
+
 
 
 ?>
