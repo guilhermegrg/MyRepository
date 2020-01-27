@@ -11,6 +11,11 @@
    
    <?php 
 
+
+     $username ="";
+        $password  ="";
+        $email  ="";
+
     $message ="";
 
     if(isset($_POST['submit'])){
@@ -19,24 +24,43 @@
         $password =  $_POST['password'];
         $email = $_POST['email'];
         
-        if(!empty($username) && !empty($password) && !empty($email)){
+        if(!empty($username) && !empty($password) && !empty($email) ){
             
             
-        $username = mysqli_real_escape_string($conn,$username);
-        $password = mysqli_real_escape_string($conn,$password);
-        $email = mysqli_real_escape_string($conn,$email);
-        
-        $password = password_hash($password,PASSWORD_DEFAULT);
-        
-//        echo "$username - $password - $email";
-        
-        
-        $query = "INSERT INTO users(username, password, email, role) VALUES( '$username', '$password', '$email','')";
-        $result = query($query);
-       
-        $message = "<p class='bg-success'>Your registration has been submitted!</p>";
-        
+        $username = mysqli_real_escape_string($conn,trim($username));
+        $password = mysqli_real_escape_string($conn,trim($password));
+        $email = mysqli_real_escape_string($conn,trim($email));
             
+        $validation = true; 
+        if(isUsernameRegistered($username))
+        {
+            echo "<p class='bg-danger'>Username '$username' already exists! Pick another! </p>";
+            $validation = false;
+        }
+        
+        if(isEmailRegistered($email))
+        {
+            echo "<p class='bg-danger'>Email '$email' already exists! Pick another! </p>";
+            $validation = false;
+        }   
+            
+        if($validation){
+            $password = password_hash($password,PASSWORD_DEFAULT);
+
+    //        echo "$username - $password - $email";
+
+
+            $query = "INSERT INTO users(username, password, email, role) VALUES( '$username', '$password', '$email','')";
+            $result = query($query);
+
+            $message = "<p class='bg-success'>Your registration has been submitted!</p>";
+            
+            $username ="";
+            $password  ="";
+            $email  ="";
+
+
+        }
             
         }else{
         $message = "<p class='bg-danger'>Fields can't be empty !</p>";
@@ -62,15 +86,15 @@
                        <h6 class="text-center"><?php echo $message; ?></h6>
                         <div class="form-group">
                             <label for="username" class="sr-only">username</label>
-                            <input type="text" name="username" id="username" class="form-control" placeholder="Enter Desired Username">
+                            <input type="text" name="username" id="username" class="form-control" placeholder="Enter Desired Username" value='<?php echo $username; ?>' autocomplete="on" >
                         </div>
                          <div class="form-group">
                             <label for="email" class="sr-only">Email</label>
-                            <input type="email" name="email" id="email" class="form-control" placeholder="somebody@example.com">
+                            <input type="email" name="email" id="email" class="form-control" placeholder="somebody@example.com" value='<?php echo $email; ?>'  autocomplete="on" >
                         </div>
                          <div class="form-group">
                             <label for="password" class="sr-only">Password</label>
-                            <input type="password" name="password" id="key" class="form-control" placeholder="Password">
+                            <input type="password" name="password" id="key" class="form-control" placeholder="Password" value='<?php echo $password; ?>'>
                         </div>
                 
                         <input type="submit" name="submit" id="btn-login" class="btn btn-custom btn-lg btn-block" value="Register">

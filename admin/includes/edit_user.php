@@ -43,21 +43,51 @@
 //            echo "Passes 2: $password -> $hashed_password<br>";
         }
         
-        $query = "UPDATE users SET username='$username', password='$hashed_password', email='$email', firstname='$firstname', lastname='$lastname', role='$role' " ;
-        
-        if($profileimage)
-            $query .= ", profileimage='$profileimage' ";
-        
-        $query .= " WHERE id=$id";
-        
-        query($query);
-//        echo "<h1>$result</h1>";
-        
-         echo "<p class='bg-success'>User '$username' Updated! <a href='users.php?source=edit_user&id=$id'>Edit User</a> or <a href='users.php'>View All Users</a></p>";
-        
-        header("Location: users.php");
         
         
+        
+        
+        
+        
+         $validation = true;
+        if(empty($username) || empty($password) || empty($email)){
+            echo "<p class='bg-danger'>Fields can't be empty! </p>";
+            $validation = false;
+        }
+
+        $usernameCheckValue = isUsernameRegistered($username);
+        if($usernameCheckValue<0 || $usernameCheckValue != $id)
+        {
+            echo "<p class='bg-danger'>Username '$username' already exists! Pick another! </p>";
+            $validation = false;
+        }
+        
+        
+        $emailCheckValue = isEmailRegistered($email);
+        if($emailCheckValue<0 || $emailCheckValue != $id)
+        {
+            echo "<p class='bg-danger'>Email '$email' already exists! Pick another! </p>";
+            $validation = false;
+        }
+        
+        
+        if($validation){
+        
+            $query = "UPDATE users SET username='$username', password='$hashed_password', email='$email', firstname='$firstname', lastname='$lastname', role='$role' " ;
+
+            if($profileimage)
+                $query .= ", profileimage='$profileimage' ";
+
+            $query .= " WHERE id=$id";
+
+            query($query);
+    //        echo "<h1>$result</h1>";
+
+             echo "<p class='bg-success'>User '$username' Updated! <a href='users.php?source=edit_user&id=$id'>Edit User</a> or <a href='users.php'>View All Users</a></p>";
+
+            header("Location: users.php");
+
+        }
         
     }
 

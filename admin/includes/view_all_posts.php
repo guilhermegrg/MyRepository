@@ -147,7 +147,7 @@ if(isset($_POST['checkBoxArray']) && isset($_POST['bulkAction'])){
                                <?php
 
                         
-                        if(isset($_GET['delete'])){
+                        if(isset($_POST['delete'])){
                             
                             if(!isset($_SESSION['role'])){
 //                                echo "NO USER ROLE!!!";
@@ -157,7 +157,7 @@ if(isset($_POST['checkBoxArray']) && isset($_POST['bulkAction'])){
                                 $user_role = $_SESSION['role'];
                                 if($user_role == "admin"){
                             
-                                    $id=$_GET['delete'];
+                                    $id=$_POST['post_id'];
                                     $query = "DELETE FROM posts WHERE id=$id";
                                     query($query);
                                     header("Location: posts.php");
@@ -246,11 +246,32 @@ if(isset($_POST['checkBoxArray']) && isset($_POST['bulkAction'])){
                                       echo "<td><a href='?source=view_comments&post_id=$id'>$comment_count</a></td>";
                                       echo "<td>$views</td>";
                                       echo "<td>$date</td>";
-                                      echo "<td><a href='../post.php?id=$id' >View Post</a></td>";
-                                      echo "<td><a href='?source=edit_post&id=$id' >Edit</a></td>";
+                                      echo "<td><a class='btn btn-primary' href='../post.php?id=$id' >View Post</a></td>";
+                                      echo "<td><a class='btn btn-info' href='?source=edit_post&id=$id' >Edit</a></td>";
                                       echo "<td><a href='?reset_views=$id' >Reset Views</a></td>";
-//                                      echo "<td><a onClick=\"javascript: return confirm('Are you sure you want to delete?')\" href='?delete=$id' >Delete</a></td>";
-                                      echo "<td><a rel='$id' href='javascript:void(0)' class='delete_link'>Delete</a></td>";
+//                                    echo "<td><a onClick=\"javascript: return confirm('Are you sure you want to delete?')\" href='?delete=$id' >Delete</a></td>";
+                                      
+                                      
+                                    ?>  
+<!--
+                                      <td>
+                                      <form action="POST">
+                                          <input type="hidden" name='post_id' value='<?php echo $id; ?>'>
+                                          <input rel='$id' type="submit" name="delete" value="Delete" class="btn btn-danger delete_link">
+                                      </form>
+                                       </td>
+                                      
+-->
+                                      
+                                    <?php
+                                      
+                                      echo "<td><a rel='$id' href='javascript:void(0)' class='btn btn-danger delete_link'>Delete</a></td>";
+                                      
+                                      
+                                      
+                                      
+                                      
+                                      
                                       echo "</tr>";
                                       
                                       
@@ -300,13 +321,13 @@ $(document).ready(function(){
     $(".delete_link").on('click',function(){
         
         
-        
+//        alert('Hellooooo');
         
         var id = $(this).attr('rel');
-        var delete_url = "?delete=" + id;
+//        var delete_url = "?delete=" + id;
 //        alert(delete_url);
         
-        $(".modal_delete_link").attr('href',delete_url);
+        $(".modal_delete_link").attr('value',id);
         $("#myModal").modal("show");
         
         

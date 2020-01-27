@@ -17,7 +17,14 @@
         <h3 class='text-center'>Are you sure you want to delete this post ?</h3>
       </div>
       <div class="modal-footer">
-       <a href="" class="btn btn-danger modal_delete_link">Delete</a>
+      
+      <form action="posts.php" method="post" >
+          <input type="hidden" name='post_id' value='<?php echo $id; ?>' class="modal_delete_link">
+          <input type="submit" name="delete" value="Delete" class="btn btn-danger">
+      </form>
+      
+      
+<!--       <a href="" class="btn btn-danger modal_delete_link">Delete</a>-->
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
       </div>
     </div>

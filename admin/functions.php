@@ -1,6 +1,37 @@
 <?php
 
 
+function isUsernameRegistered($username){
+    $query = "SELECT * FROM users WHERE username = '$username'";
+    $results = query($query);
+    $count = mysqli_num_rows($results);
+    
+    if($count == 1){
+        $row = mysqli_fetch_assoc($results);
+        return $row['id'];
+    }elseif($count > 1){
+        return -1;
+    }else
+    return 0;
+    
+}
+
+function isEmailRegistered($email){
+    $query = "SELECT * FROM users WHERE email = '$email'";
+    $results = query($query);
+    $count = mysqli_num_rows($results);
+    
+   if($count == 1){
+        $row = mysqli_fetch_assoc($results);
+        return $row['id'];
+    }elseif($count > 1){
+        return -1;
+    }else
+    return 0;
+    
+}
+
+
 function escape($string){
     global $conn;
     return mysqli_real_escape_string($conn,trim($string));
