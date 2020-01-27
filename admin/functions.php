@@ -81,12 +81,21 @@ function insertCategories(){
                             }else{
                                 
 
-                            $name = mysqli_real_escape_string($conn,$name);
+                            $name = mysqli_real_escape_string($conn,trim($name));
                             
-                            $query = "INSERT INTO categories (name) VALUES ('$name')";
-                            $result = query($query);
                                 
-                                if(!$result){
+                            $query = "INSERT INTO categories (name) VALUES (?)";
+                            $stmt = mysqli_prepare($conn,$query);
+                                
+                            mysqli_stmt_bind_param($stmt,"s",$name);
+                            mysqli_stmt_execute($stmt);
+                            mysqli_stmt_store_result($stmt);                                
+                                
+                                 mysqli_stmt_close($stmt);
+//                            $query = "INSERT INTO categories (name) VALUES ('$name')";
+//                            $result = query($query);
+                                
+                                if(!$stmt){
                                     
                                     die("Could not create category. " . mysqli_error($conn));
                                     
@@ -101,15 +110,26 @@ function insertCategories(){
 }
 
 function  deleteCategory(){
+        global $conn;
     
         if(isset($_GET['delete'])){
         
         $delete_id = $_GET['delete'];
         
-        $query = "DELETE FROM categories WHERE id=$delete_id";
-        $result = query($query);
+        $query = "DELETE FROM categories WHERE id=?";
+        $stmt = mysqli_prepare($conn,$query);
+
+        mysqli_stmt_bind_param($stmt,"i",$delete_id);
+        mysqli_stmt_execute($stmt);
+        mysqli_stmt_store_result($stmt);                                
+
+        mysqli_stmt_close($stmt);            
+            
+            
+//        $query = "DELETE FROM categories WHERE id=$delete_id";
+//        $result = query($query);
         
-        if(!$result){
+        if(!$stmt){
             echo "Error deleting category $delete_id " . mysqli_error($conn);
         }else{
             header("Location: categories.php");

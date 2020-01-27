@@ -21,11 +21,13 @@
                 
                 
                 <p><span class="glyphicon glyphicon-time"></span> Posted on <?php echo $date; ?></p>
+<!--
                 <?php
                     $query = "SELECT * FROM comments WHERE post_id=$id";
                     $results = query($query);
                     $comment_count = mysqli_num_rows($results);
                 ?>
+-->
                 
                  <p><span class="glyphicon glyphicon-comment"></span> <?php echo $comment_count; ?></p>
                  
