@@ -6,8 +6,24 @@
     
     <?php  include "includes/navigation.php"; ?>
     
+    <?php include "pusher.php"; ?>
+    
  
    
+   
+   
+   <?php
+
+        if(isset($_POST['pusher'])){
+        
+            $pusher_msg = $_POST['pusher_msg'];
+//            echo "<br>$pusher_msg</br>";
+            sendPusherEvent("admin_notifications","new_user",$pusher_msg);
+        
+        }
+
+    ?>
+
    
    <?php 
 
@@ -55,9 +71,14 @@
 
             $message = "<p class='bg-success'>Your registration has been submitted!</p>";
             
+            
+            sendPusherEvent("admin_notifications","new_user","New User '$username' from '$email' has been created!");
+            
             $username ="";
             $password  ="";
             $email  ="";
+            
+            
 
 
         }
@@ -106,9 +127,21 @@
     </div> <!-- /.container -->
 </section>
 
+<div class="form-wrap">
+    <form role="form" action="registration.php" method="post" id="pusher-form" autocomplete="off">
+        <div class="form-group">
+            <label for="pusher_msg" class="sr-only">Email</label>
+            <input type="text" name="pusher_msg" id="pusher_msg" class="form-control" placeholder="Write your messa" autocomplete="on" >
+        </div>
+        <input type="submit" name="pusher" id="btn_pusher" class="btn btn-custom btn-lg btn-block" value="Send Pusher">
+    </form>
+</div>
 
         <hr>
 
 
 
 <?php include "includes/footer.php";?>
+
+
+

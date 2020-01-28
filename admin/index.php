@@ -40,4 +40,52 @@
 
 
 
+<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet">
+
 <?php include "includes/footer.php" ?>
+  
+  <?php
+    $path = $_SERVER['DOCUMENT_ROOT'];
+    require $path.'/cms/vendor/autoload.php';
+
+
+    $dotenv = Dotenv\Dotenv::createImmutable($path.'/cms/');
+    $dotenv->load();
+    $pusher_key= getenv('PUSHER_KEY');
+    ?>
+
+  <script src="https://js.pusher.com/5.0/pusher.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+  
+  <script>
+//      Pusher.logToConsole = true;
+      
+      $(document).ready(function(){
+          
+          
+            var pusher_key = <?php echo json_encode($pusher_key); ?>;
+            console.log(pusher_key);
+            
+            var pusher = new Pusher(pusher_key, {
+            cluster: 'eu',
+            forceTLS: true
+            });
+
+            var channel = pusher.subscribe('admin_notifications');
+            channel.bind('new_user', function(data) {
+//                console.log(data.message);
+//                alert(JSON.stringify(data.message));
+                
+                toastr.success(data.message);
+            });    
+          
+          
+          
+      });
+
+
+
+
+
+
+  </script>

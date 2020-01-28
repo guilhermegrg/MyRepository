@@ -1,5 +1,7 @@
 <?php
 
+$path = $_SERVER['DOCUMENT_ROOT'];
+require $path . '/cms/vendor/autoload.php';
 
  if(defined('DB_CONSTANTS')){
      
@@ -7,10 +9,16 @@
      
      define('DB_CONSTANTS',"exists");
      
-$db['db_host'] = "localhost";
-$db['db_user'] = "root";
-$db['db_pass'] ="";
-$db['db_database'] = "cms";
+
+
+
+$dotenv = Dotenv\Dotenv::createImmutable($path . "/cms/");
+$dotenv->load();
+     
+$db['db_host'] = getenv("DB_HOST");
+$db['db_user'] =  getenv("DB_USER");
+$db['db_pass'] = getenv("DB_PASS");
+$db['db_database'] =  getenv("DB_DATABASE");
 
 foreach($db as $key => $value){
 //    echo "key: $key Value: $value<br>";
