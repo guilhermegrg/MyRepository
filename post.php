@@ -4,7 +4,40 @@
   
 <?php
 
+if(isset($_POST['like'])){
+    
+    $like =$_POST['like'];
+    $post_id =$_POST['post_id'];
+    $user_id =$_POST['user_id'];
+    
+    echo "Like: $like Post: $post_id User: $user_id";
+    
+    if(!empty($like) && !empty($post_id) && !empty($user_id)){
 
+        if($like == 1){
+        
+            $query = "UPDATE posts SET like_count = like_count + 1 WHERE id=$post_id";
+            query($query);
+
+            $date = time();
+
+            $query = "INSERT INTO likes(post_id, user_id, date) VALUES ($post_id, $user_id, '$date') ";
+            query($query);
+            
+        }elseif($like == -1){
+
+            $query = "UPDATE posts SET like_count = like_count - 1 WHERE id=$post_id";
+            query($query);
+
+            $query = "DELETE FROM likes WHERE post_id = $post_id AND  user_id=$user_id";
+            query($query);
+
+        }
+
+    }
+    
+}
+else
 if(isset($_GET['id'])){
     $id = $_GET['id'];
     
@@ -131,6 +164,35 @@ if(isset($_GET['id'])){
 
                 <hr>
 
+              <!-- Likessssss -->
+              
+              <?php if(isLoggedIn()) : ?>
+               <div class="row" >
+                   
+                      <?php if(isPostLiked($id)) : ?>
+                          <p class="pull-right" data-toggle="tooltip" data-placement="top" title="I liked this before">
+                           <a class="unlike" href=""><span class="glyphicon glyphicon-thumbs-down" ></span>Unlike</a>
+                           </p>
+                      <?php else: ?>
+                          <p class="pull-right" data-toggle="tooltip" data-placement="top" title="Want to like it?">
+                           <a class="like" href=""><span class="glyphicon glyphicon-thumbs-up"></span>Like</a>
+                           </p>
+                      <?php endif; ?>
+                   
+               </div>
+               <?php else: ?>
+                <div class="row">
+                    <p class="pull-right">You need to <a href="/cms/login">login</a> to like</p>    
+                </div>
+               <?php endif; ?>
+               
+               
+               <div class="row">
+                   <p class="pull-right" >Likes: <?php echo getPostLikes($id); ?></p>
+               </div>
+               
+               <hr>
+               
                 <!-- Blog Comments -->
 
                 
@@ -145,3 +207,64 @@ if(isset($_GET['id'])){
         <hr>
 
 <?php include "includes/footer.php"; ?>
+
+<script>
+            
+            
+    $(document).ready(function(){
+        
+        
+            $("[data-toggle='tooltip']").tooltip();
+       
+            $(".like").click(function(){
+//               alert("like!");
+//               console.log("like!");
+                var post_id = <?php echo $id; ?>;
+                var user_id = <?php echo getUserId(); ?>;
+
+                console.log("Post: " + post_id + " User:" + user_id);
+
+                $.ajax({
+                    url:"/cms/post.php?id="+post_id,
+                    type:'post',
+                    data: {
+                        'like':1,
+                        'post_id': post_id,
+                        'user_id': user_id
+                    }
+
+
+                });
+
+            });
+        
+            $(".unlike").click(function(){
+//           alert("Unlike!");
+//           console.log("Unlike!!!");
+            var post_id = <?php echo $id; ?>;
+            var user_id = <?php echo getUserId(); ?>;
+            
+            console.log("Post: " + post_id + " User:" + user_id);
+            
+            $.ajax({
+                url:"/cms/post.php?id="+post_id,
+                type:'post',
+                data: {
+                    'like':-1,
+                    'post_id': post_id,
+                    'user_id': user_id
+                }
+                
+                
+            });
+            
+        });
+
+        
+        });
+    
+    
+            
+            
+            
+</script>

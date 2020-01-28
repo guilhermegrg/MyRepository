@@ -142,6 +142,34 @@ function isLoggedIn(){
     return isset($_SESSION['user_id']);
 }
 
+function getUserId(){
+    return $_SESSION['user_id'];
+}
+
+function isPostLiked($post_id){
+    $user_id = getUserId();
+    $query = "SELECT * FROM likes WHERE post_id = $post_id AND user_id = $user_id";
+    $results = query($query);
+    
+    $count = mysqli_num_rows($results);
+    
+    
+//    echo "<h1>Like count: $count</h1>";
+    
+    return $count>0;
+}
+
+function getPostLikes($post_id){
+    $query = "SELECT like_count FROM posts WHERE id = $post_id";
+    $results = query($query);
+    
+    $row = mysqli_fetch_assoc($results);
+    $like_count = $row['like_count'];
+    
+    return $like_count;
+}
+
+
 function checkIfUserIsLoggedInAndRedirect($redirectLocation="/cms/index"){
     if(isLoggedIn()){
         redirect($redirectLocation);
