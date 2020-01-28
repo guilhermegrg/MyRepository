@@ -11,9 +11,11 @@
         if($role == 'admin'){
             
         }else{
+//            echo "<h2>Error Role!</h2>";
             header("Location: ../");
         }
     }else{
+//        echo "<h2>Error Role 2!</h2>";
         header("Location: ../");
     }
 

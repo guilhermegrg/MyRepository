@@ -1,5 +1,6 @@
 <?php  include "includes/db.php"; ?>
  <?php  include "includes/header.php"; ?>
+ <?php  include "admin/email.php"; ?>
 
 
     <!-- Navigation -->
@@ -27,14 +28,8 @@
             $email = mysqli_real_escape_string($conn,trim($email));
 
             
-            ini_set("SMTP", "smtp.mailtrap.io");
-            ini_set("smtp_port","465");
-            
-//            SMTP=smtp.gmail.com
-            
-            
-            $header = "From: " . $email;
-            mail("guilhermegrg@gmail.com",$subject,$content,$header);
+            sendBasicEmail("guilhermegrg@gmail.com",$email,$subject,$content);
+//            mail("guilhermegrg@gmail.com",$subject,$content,$header);
             
             
             $message = "<p class='bg-success'>Your message has been submitted!</p>";

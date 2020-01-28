@@ -1,5 +1,153 @@
 <?php
 
+//function clean($string){
+//    global $conn;
+//    return mysqli_real_escape_string($conn,trim($string));
+//}
+
+function insertTokenInUserById($id,$token){
+    global $conn;
+    
+    $query = "UPDATE users SET token=? WHERE id=?";
+    $stmt = mysqli_prepare($conn,$query);
+    mysqli_stmt_bind_param($stmt,"si",$token,$id);
+    mysqli_stmt_execute($stmt);
+    mysqli_stmt_store_result($stmt);
+    //mysqli_stmt_bind_result($stmt, $user_id);
+    
+//    $count = mysqli_stmt_num_rows($stmt); 
+    mysqli_stmt_close($stmt);
+//    if($count == 0){
+//        mysqli_stmt_close($stmt);
+//        return 0;
+//    }else{
+//        mysqli_stmt_fetch($stmt);
+}
+
+function getToken($length=50){
+    return bin2hex(openssl_random_pseudo_bytes($length));
+}
+
+function getUserByEmail($email){
+    
+    global $conn;
+    
+   $email = mysqli_real_escape_string($conn, trim($email));
+
+    
+//    echo $username ;
+    
+    $query = "SELECT id FROM users WHERE email = ?";
+    $stmt = mysqli_prepare($conn,$query);
+    mysqli_stmt_bind_param($stmt,"s",$email);
+    mysqli_stmt_execute($stmt);
+    mysqli_stmt_store_result($stmt);
+    mysqli_stmt_bind_result($stmt, $user_id);
+    
+    $count = mysqli_stmt_num_rows($stmt); 
+    
+    if($count == 0){
+        mysqli_stmt_close($stmt);
+        return 0;
+    }else{
+        mysqli_stmt_fetch($stmt);
+        mysqli_stmt_close($stmt);
+        return $user_id;
+        
+    }
+}
+
+
+function loginUser($username,$password){
+    global $conn;
+    
+    $username = mysqli_real_escape_string($conn, trim($username));
+    $password = mysqli_real_escape_string($conn, trim($password));
+
+    
+//    echo $username ;
+    
+    $query = "SELECT id, password, role, firstname, lastname FROM users WHERE username = ?";
+    $stmt = mysqli_prepare($conn,$query);
+    mysqli_stmt_bind_param($stmt,"s",$username);
+    mysqli_stmt_execute($stmt);
+    mysqli_stmt_store_result($stmt);
+    mysqli_stmt_bind_result($stmt, $user_id, $user_password, $role, $firstname, $lastname);
+    
+    $count = mysqli_stmt_num_rows($stmt);
+    
+//    mysqli_stmt_fetch($stme);
+    
+    
+    
+
+    
+    
+//    $results = query($query);
+//    
+//    $count = mysqli_num_rows($results);
+    
+    
+    if($count == 0){
+        echo "No user name $username";
+        redirect("/cms/");
+    }else{
+//        echo "found that guy $username";
+        mysqli_stmt_fetch($stmt);
+//        $row = mysqli_fetch_assoc($results);
+        
+//        $user_id = $row['id'];
+//        $user_password = $row['password'];
+//        $role = $row['role'];
+//        $firstname = $row['firstname'];
+//        $lastname = $row['lastname'];
+        
+        if(!password_verify($password,$user_password)){
+//            echo "Not valid pass!";
+            mysqli_stmt_close($stmt);
+            redirect("/cms/");
+        }else{
+            
+            echo "Valid pass!";
+            session_start();
+            $_SESSION['user_id']=$user_id;
+            $_SESSION['username']=$username;
+            $_SESSION['firstname']=$firstname;
+            $_SESSION['lastname']=$lastname;
+            $_SESSION['role']=$role;
+            mysqli_stmt_close($stmt);
+            redirect("/cms/admin");
+        }
+        
+    }
+    
+}
+
+
+function redirect($target){
+    header("Location: ". $target );
+    exit;
+}
+
+function ifItIsMethod($method=null){
+    
+    if($_SERVER['REQUEST_METHOD'] == strtoupper($method)){
+        return true;
+    }else
+        return false;
+}
+
+
+function isLoggedIn(){
+    return isset($_SESSION['user_id']);
+}
+
+function checkIfUserIsLoggedInAndRedirect($redirectLocation="/cms/index"){
+    if(isLoggedIn()){
+        redirect($redirectLocation);
+    }
+}
+
 
 function isUsernameRegistered($username){
     $query = "SELECT * FROM users WHERE username = '$username'";

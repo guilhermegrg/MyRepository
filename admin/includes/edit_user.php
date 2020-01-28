@@ -56,7 +56,7 @@
         }
 
         $usernameCheckValue = isUsernameRegistered($username);
-        if($usernameCheckValue<0 || $usernameCheckValue != $id)
+        if($usernameCheckValue != 0 && ($usernameCheckValue<0 || $usernameCheckValue != $id))
         {
             echo "<p class='bg-danger'>Username '$username' already exists! Pick another! </p>";
             $validation = false;
@@ -64,9 +64,10 @@
         
         
         $emailCheckValue = isEmailRegistered($email);
-        if($emailCheckValue<0 || $emailCheckValue != $id)
+        
+        if($emailCheckValue!=0 && ($emailCheckValue<0 || $emailCheckValue != $id))
         {
-            echo "<p class='bg-danger'>Email '$email' already exists! Pick another! </p>";
+            echo "<p class='bg-danger'>Email '$email' already exists! Pick another: $emailCheckValue </p>";
             $validation = false;
         }
         

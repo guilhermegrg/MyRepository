@@ -1,0 +1,9 @@
+RewriteEngine on
+
+RewriteRule ^(index|contact|registration|login)$ $1.php [NC,L]
+
+RewriteRule ^post/(\d+)$ post.php?id=$1 [NC,L]
+
+RewriteRule ^category/(\d+)$ posts_by_category.php?cat_id=$1 [NC,L]
+
+RewriteRule ^author/(\d+)$ posts_by_author.php?author_id=$1 [NC,L]

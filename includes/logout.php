@@ -15,7 +15,7 @@
 //            $_SESSION['lastname']= NULL;
 //            $_SESSION['role']= NULL;
 
-            header("Location: ../index.php");
+            header("Location: /cms/index");
 
 
 

@@ -82,7 +82,7 @@ if(isset($_GET['id'])){
                 <!-- Author -->
                 <?php if($author_id){ ?>
                 <p class="lead">
-                    by <a href="posts_by_author.php?author_id=<?php echo $author_id; ?>"><?php echo $author_name; ?></a>
+                    by <a href="/cms/author/<?php echo $author_id; ?>"><?php echo $author_name; ?></a>
                 </p>
                 <?php } ?>
                
@@ -114,7 +114,15 @@ if(isset($_GET['id'])){
                 <hr>
 
                 <!-- Preview Image -->
-                <img class="img-responsive" src="images/<?php echo $image; ?>" alt="">
+                
+                <?php if(!isset($image) || empty($image)): ?> 
+                    <img class="img-responsive" src="/cms/images/CF_Hierarchy_new1.png" alt="">
+                <?php else: ?>
+                    <img class="img-responsive" src="/cms/images/<?php echo $image; ?>" alt="">                
+                <?php endif; ?>
+                
+                
+                
 
                 <hr>
 

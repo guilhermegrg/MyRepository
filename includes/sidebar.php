@@ -9,20 +9,21 @@
                
                 <div class="well">
                    
-                <?php if(isset($_SESSION['role'])): 
+                <?php if(isLoggedIn()): 
 //                   $role = $_SESSION['role'];
 //                   echo "<h1>$role</h1>";
                
                ?>
                  
-     
+                 <div class="form-group">
                      <h4>Logged in as <?php echo $_SESSION['username']; ?> </h4>
-
+                     <a href="/cms/includes/logout.php" class="btn btn-primary">Logout</a>
+                </div>
                   
                 <?php else: ?>
                    
                     <h4>Login</h4>
-                    <form action="includes/login.php" method="post">
+                    <form action="/cms/login.php" method="post">
                       <div class="form-group">
                         <input name="username" type="text" class="form-control" placeholder="Enter Username">
                     </div>
@@ -32,6 +33,10 @@
                             <button type="submit" name="login" value="Login" class="btn btn-primary">Login</button>
                             
                         </span>
+                    </div>
+                    
+                    <div class="form-group">
+                        <a href="/cms/forgot.php?token=<?php echo uniqid(true); ?>" >Forgot your password? Click here to recover it</a>
                     </div>
                     
                     </form>

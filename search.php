@@ -31,7 +31,7 @@
                     while($row = mysqli_fetch_assoc($posts)){
                         $title = $row['title'];
                         $cat_id = $row['cat_id'];
-                        $author = $row['author'];
+                        $author_id = $row['author_id'];
                         $date = $row['date'];
                         $content  = $row['content'];
                         $image = $row['image'];

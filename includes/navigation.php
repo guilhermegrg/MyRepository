@@ -12,7 +12,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="index.php">CMS Frontend</a>
+                <a class="navbar-brand" href="/cms/index">CMS Frontend</a>
             </div>
             
             
@@ -34,6 +34,7 @@
                     $admin_selection_style="";
                     $registration_selection_style="";
                     $contact_selection_style="";
+                    $login_selection_style="";
 
                     
                     switch($pagename){
@@ -47,6 +48,10 @@
                             
                         case "contact.php":
                             $contact_selection_style="active";
+                        break;
+                            
+                        case "login.php":
+                            $login_selection_style="active";
                         break;
 
                             
@@ -78,16 +83,33 @@
                         if($selected_cat_id == $cat_id)
                             $style=$category_selection_style;
                         
-                        echo "<li class='$style' ><a href='posts_by_category.php?cat_id=$cat_id' >$name</a>";
+//                        echo "<li class='$style' ><a href='posts_by_category.php?cat_id=$cat_id' >$name</a>";
+                        echo "<li class='$style' ><a href='/cms/category/$cat_id' >$name</a>";
     
                     }
                     
                     ?>
                    
-                   <li <?php echo "class='$admin_selection_style'"; ?> >
-                        <a  href="admin">Admin</a>
-                    </li>
+                   
+                   <?php if(isLoggedIn()): ?>
+                   
+                       <li <?php echo "class='$admin_selection_style'"; ?> >
+                            <a  href="admin">Admin</a>
+                        </li>
+
+                       <li>
+                            <a  href="/cms/includes/logout.php">Logout</a>
+                        </li>
                     
+                                        
+                                                                                
+                    <?php else: ?>
+                    
+                        <li <?php echo "class='$login_selection_style'"; ?> > 
+                            <a  href="/cms/login">Login</a>
+                        </li>
+                    
+                    <?php endif; ?>
                     
                      <li <?php echo "class='$registration_selection_style'"; ?> >
                         <a   href="registration.php">Register</a>
@@ -96,6 +118,8 @@
                     <li <?php echo "class='$contact_selection_style'"; ?> > 
                         <a  href="contact.php">Contact</a>
                     </li>
+                    
+
                    
 <!--
                     <li>
